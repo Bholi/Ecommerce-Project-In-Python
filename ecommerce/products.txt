@@ -1,0 +1,1 @@
+{"name": "Pen", "description": "This is a pen", "price": 5.0, "seller_name": "Sita"}-{"name": "Book", "description": "This is a book", "price": 250.0, "seller_name": "Hari"}-

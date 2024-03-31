@@ -1,1 +1,1 @@
-{"username": "Ram", "password": "ram123", "usertype": "buyer"}{"username": "Shyam", "password": "shyam123", "usertype": "seller"}
+{"username": "Ram", "password": "ram123", "usertype": "buyer"}-{"username": "Sita", "password": "sita123", "usertype": "seller"}-{"username": "Hari", "password": "hari123", "usertype": "seller"}-
