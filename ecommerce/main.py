@@ -13,6 +13,9 @@
 # After the view product logic ask the user for product purchase
 # Ask him/her for the name of product he/she wants to purchase and the quantity of purchase
 # Find the product which the buyer wants to purchase and get the price of the product then multiply the price with quantity and print it as total for buyer
+# Buyer view bill logic
+# Get all the bill data from bill.txt and print only those datas whose buyer key has the same value as the login user's name
+
 
 
 
@@ -37,7 +40,7 @@ def addProduct(seller_name):
     f.close()
     print('Data added')
 
-def viewProduct():
+def viewProduct(username):
     f = open('/Users/faizansari/Mind Risers/Python Class/ecommerce/products.txt','r')
     a = f.read()
     product_list = a.split('-')
@@ -45,6 +48,7 @@ def viewProduct():
         if i != '':
             product_data = json.loads(i)
             print(product_data['name'])
+
     
     user_input = input('Do you want to purchase a product ? "Yes" or "No" : ').lower()
     if user_input == 'yes':
@@ -55,14 +59,47 @@ def viewProduct():
             if i != '':
                 choosed_product = json.loads(i)
                 if choosed_product['name'] == product_name:
+                    product = choosed_product
                     total_amount = quantity * choosed_product['price']
                     print(f'The total price for {quantity} {product_name}s is Rs.{total_amount}')
+        
+        bill_data = {
+            'product_name': product.get('name'),
+            'quantity': quantity,
+            'total_price': total_amount,
+            'username':username,
+        }
+        json_bill_data = json.dumps(bill_data)
+        f = open('/Users/faizansari/Mind Risers/Python Class/ecommerce/bill.txt','a')
+        f.write(json_bill_data + '-')
+        f.close()
 
     elif user_input == 'no':
         pass
     f.close()
 
 
+def view_your_product(seller_name):
+    f = open('/Users/faizansari/Mind Risers/Python Class/ecommerce/products.txt','r')
+    a = f.read()
+    f.close()
+    list_product_data = a.split('-')
+    for i in list_product_data:
+        if i != '':
+            products = json.loads(i)
+            if products.get('seller_name') == seller_name:
+                print(i)
+
+def view_bills(user):
+    f = open('/Users/faizansari/Mind Risers/Python Class/ecommerce/bill.txt','r')
+    a = f.read()
+    f.close()
+    bills_list = a.split('-')
+    for i in bills_list:
+        if i != '':
+            bills = json.loads(i)
+            if bills.get('username') == user:
+                print(bills)
 
 
 def login():
@@ -90,6 +127,8 @@ def login():
             user_operation = int(input('Enter the operation you want to perform : '))
             if user_operation == 1:
                 addProduct(user_type.get('username'))
+            elif user_operation == 3:
+                view_your_product(user_type.get('username'))
 
         elif user_type.get('usertype') == 'buyer':
             print('''
@@ -99,7 +138,10 @@ def login():
             ''')
             user_operation = int(input('Enter the operation you want to perform : '))
             if user_operation == 1:
-                viewProduct()
+                viewProduct(user_type.get('username'))
+            
+            elif user_operation == 3:
+                view_bills(user_type.get('username'))
 
             
     else:
